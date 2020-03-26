@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id='root'></div>
+
+    <script type="text/babel">
+    const todosList = [
+        {text:'123'},
+        {text:'123'},
+        {text:'123'}
+    ];
+    
+    class Add extends React.Component {
+        state = {
+            text: ''
+        }
+        onBtnClickAdd = (e) => {
+            e.preventDefault()
+            
+            const {text} = this.state
+            this.props.onAddList({
+                text,
+
+            })  
+        }
+        handleKeyPress = (e) => {
+            if(e.key == "Enter") {
+                onBtnClickAdd()
+            }
+        }
+        handleChange = (e) => {
+            this.setState({text: e.target.value})
+            
+        }
+        render() {
+            const {text} = this.state
+            return (
+                <React.Fragment>
+                    <div className='container-input' > 
+                        <input type="checkbox" 
+                        className='checking-all-tasks' />
+                        
+                        <input type="text"  
+                        placeholder='What needs to be done?'
+                        onChange={this.handleChange}
+                        onKeyPress={this.handleKeyPress}
+                        
+                        className='to-do-list-entry'>
+                        </input>
+                        
+                        <button className='butClick' onClick={this.onBtnClickAdd}>click</button>
+                        </div>
+                    
+                </React.Fragment>    
+            )
+        }
+    }
+    class Task extends React.Component {
+        render() {
+            const {text} = this.props.data
+        
+            return(
+                
+                <div className='task'>
+                     <input className='inputCheck' type="checkbox"></input><p className='cf'>{text}</p>
+                </div>
+                
+            )
+            
+        }
+        
+    }
+
+    class List extends React.Component {
+        renderList = () => {
+            const {data} = this.props
+           let newTemplate = null
+            
+                newTemplate = data.map(function(item,index){
+                    return <Task  key={++index} data={item}/>
+                })
+            return newTemplate
+            
+        }
+        render() {
+            //console.log(this.renderList())
+            return(
+                
+            <div className='taskList'>
+                {this.renderList()}
+                  
+            </div>
+            )
+            
+        }
+        
+    }
+
+    class Footer extends React.Component {
+        render() {
+            const {dataForFooter} = this.props
+            return (
+                <div className='class_footer'> 
+                 {
+                    dataForFooter.length ?  <p className='counter-items'>{dataForFooter.length} items left</p> : <p>0 items left</p>
+                    
+                 }
+                 <input type="button" value='All' className='inp1'/>
+                 <input type="button" value='Active' className='inp2'/>
+                 <input type="button" value='Completed' className='inp2'/>
+                 
+                 </div> 
+                    
+                
+            )
+        }
+    }
+
+    class App extends React.Component {
+        state = {
+           todos : todosList
+        }
+        handleAddList = (data) => {
+            const nextList = [data, ...this.state.todos]
+            
+            this.setState({ todos: nextList })
+        }
+        render() {
+          
+            return (
+            <React.Fragment>  
+            <div className='heading'>todos</div>
+            <Add onAddList={this.handleAddList} />
+             <List data={this.state.todos}/>
+             <Footer dataForFooter={this.state.todos}/>
+            </React.Fragment>
+        )
+        }
+    }
+    
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        ) 
+    </script>
+
+<script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+</html>
